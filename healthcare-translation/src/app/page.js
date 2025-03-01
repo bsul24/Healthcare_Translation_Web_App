@@ -31,8 +31,19 @@ export default function Home() {
 
   const startListening = () => {
     if (recognition) {
-      setListening(true);
-      recognition.start();
+      // Request microphone access before starting recognition
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then(() => {
+          setListening(true);
+          recognition.start();
+        })
+        .catch((error) => {
+          console.error("Microphone access denied:", error);
+          alert("Please allow microphone access in your browser settings.");
+        });
+    } else {
+      alert("Speech recognition is not supported on this browser.");
     }
   };
 
